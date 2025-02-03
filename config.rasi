@@ -1,0 +1,6 @@
+
+configuration {
+	font : "monocraft 20";
+}
+
+@theme "/usr/share/rofi/themes/purple.rasi"
