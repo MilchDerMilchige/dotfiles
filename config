@@ -9,12 +9,15 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-set $win Mod4
 set $mod Mod1
+set $win Mod1+Shift
+set $caps lock
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font minecraft:monospace 10
+
+font pango:monocraft 10
+#font bold:monospace 10
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -23,6 +26,24 @@ font minecraft:monospace 10
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
+exec picom
+exec xrandr --output DP-4 --right-of HDMI-0
+exec xset s off
+exec --no-startup-id nitrogen --restore
+exec_always --no-startup-id xcursor-theme Bibata-Modern-Ice
+exec --no-startup-id xsetroot -cursor_name Bibata-Modern-Ice 
+
+
+# The combination of xss-lock, nm-applet and pactl is a popular choice, so
+# they are included here as an example. Modify as you see fit.
+
+# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# screen before suspend. Use loginctl lock-session to lock your screen.
+#exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock -c dd25ee --nofork
+#bindsym Shift+ð exec rofi -show drun -font "Monocraft 10"
+bindsym $mod+Control+l exec "i3lock -fbec 000000"
+bindsym $caps+d exec rofi -show drun -font "Monocraft 10"
+
 
 set $fm DP-4
 set $sm HDMI-1-1
@@ -39,20 +60,6 @@ workspace 8 output $sm
 workspace 9 output $sm
 workspace 10 output $sm
 
-
-
-
-# The combination of xss-lock, nm-applet and pactl is a popular choice, so
-# they are included here as an example. Modify as you see fit.
-
-# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-# screen before suspend. Use loginctl lock-session to lock your screen.
-#     exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-
-exec nitrogen --restore
-exec picom
-exec ~/pipefix
-
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
@@ -65,14 +72,14 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 # Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod+Shift
+floating_modifier $win
 
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
-#tiling_drag modifier titlebar
+tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec kitty --hold uwufetch
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+q kill
@@ -179,9 +186,16 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+gaps inner 25
+gaps outer -10
+
+bindsym $mod+m bar mode toggle
+
+default_border pixel 3
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize modeo
+        # These bindings trigger as soon as you enter the resize mode
 
         # Pressing left will shrink the window’s width.
         # Pressing right will grow the window’s width.
@@ -206,49 +220,38 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-
-
 set $urgent             #fc0317
 set $urgent_text        #d18080
 set $active             #94005e
 set $bg                 #380024
 set $inactive           #7d6600
+set $inactive_tab	#138140	
 set $text               #e2bdff
 
 #theme                                  title           bg              text
 
-client.focused                          $text           $active         $text
+client.focused                          $text           $active         $text		$inactive_tab
 client.focused_inactive                 $text           $inactive       $text
 client.unfocused                        $text           $inactive       $text
 client.urgent                           $urgent_text    $urgent         $text
 client.placeholder                      $text           $inactive       $urgent
 client.background                       $bg             $inactive       $bg
 
-gaps inner 25
-gaps outer -10
 
-bindsym $mod+m bar mode toggle
-
-default_border pixel 3
-default_floating_border pixel 5
-
-bar {
-        status_command i3status
-        font minecraft:monospace 50
-	position top
-
-        colors {
-                background              $bg
-                statusline              $text
-                focused_statusline      $active
-                focused_separator       $bg
-
-                # target                border          bg              text
-                focused_workspace       $active         $bg
-                active_workspace        $inactive       $bg
-                inactive_workspace      $inactive       $bg
-                urgent_workspace        $urgent         $bg             $urgent_text
-        }
-}
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+#bar {
+#	colors{
+#		background #712d85
+#		separator $active
+#		statusline #00ffbd 
+#		focused_workspace $active $active $text
+#		inactive_workspace $inactive_tab $inactive_tab $text
+#	}
+#	
+#	
+#	#cursor "default"
+#        status_command i3status
+#	position top
+#	font monocraft 50
+#}
