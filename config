@@ -240,18 +240,18 @@ client.background                       $bg             $inactive       $bg
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-#bar {
-#	colors{
-#		background #712d85
-#		separator $active
-#		statusline #00ffbd 
-#		focused_workspace $active $active $text
-#		inactive_workspace $inactive_tab $inactive_tab $text
-#	}
-#	
-#	
-#	#cursor "default"
-#        status_command i3status
-#	position top
-#	font monocraft 50
-#}
+bar {
+	colors{
+		background #712d85
+		separator $active
+		statusline #00ffbd 
+		focused_workspace $active $active $text
+		inactive_workspace $inactive_tab $inactive_tab $text
+	}
+	
+	
+	#cursor "default"
+        status_command i3status
+	position top
+	font monocraft 50
+}
